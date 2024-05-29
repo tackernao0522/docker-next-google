@@ -1,28 +1,30 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 
 const options: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET as string,
-      authorization: {
-        url: "http://localhost:3000/users/auth/google_oauth2",
-        params: { scope: "openid email profile" },
-      },
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user;
+        token.user = {
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        };
       }
       return token;
     },
     async session({ session, token }) {
-      session.user = token.user as any; // 型のエラーを避けるために any を使用
+      if (token.user) {
+        session.user = token.user as User;
+      }
       return session;
     },
   },
