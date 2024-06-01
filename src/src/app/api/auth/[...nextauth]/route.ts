@@ -1,6 +1,9 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { NextAuthOptions, User } from "next-auth";
+import { NextAuthOptions } from "next-auth";
+import axios from "axios";
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"; // 必要に応じて変更
 
 const options: NextAuthOptions = {
   providers: [
@@ -11,9 +14,56 @@ const options: NextAuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    async signIn({ user, account, profile }) {
+      console.log("SignIn callback called with:");
+      console.log("User:", user);
+      console.log("Account:", account);
+      console.log("Profile:", profile);
+
+      const provider = account?.provider;
+      const uid = account?.providerAccountId || account?.sub; // Adjusted to use providerAccountId
+      const name = user.name;
+      const email = user.email;
+
+      console.log("Provider:", provider);
+      console.log("UID:", uid);
+      console.log("Name:", name);
+      console.log("Email:", email);
+
+      if (!provider || !uid || !name || !email) {
+        console.error("Incomplete account information.");
+        return false;
+      }
+
+      try {
+        const response = await axios.post(
+          `${apiUrl}/auth/${provider}/callback`,
+          {
+            provider,
+            uid,
+            name,
+            email,
+          }
+        );
+
+        console.log("Response from Rails:", response.status, response.data);
+
+        if (response.status === 200) {
+          return true;
+        } else {
+          console.error("Error response from Rails:", response.status);
+          return false;
+        }
+      } catch (error) {
+        console.error("Error fetching JWT from Rails:", error);
+        return false;
+      }
+    },
     async jwt({ token, user }) {
+      console.log("JWT callback called with user:", user);
       if (user) {
         token.user = {
+          id: user.id, // Adjust according to your user object structure
           name: user.name,
           email: user.email,
           image: user.image,
@@ -22,8 +72,9 @@ const options: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      console.log("Session callback called with token:", token);
       if (token.user) {
-        session.user = token.user as User;
+        session.user = token.user;
       }
       return session;
     },

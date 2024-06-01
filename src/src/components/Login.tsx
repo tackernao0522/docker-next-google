@@ -1,8 +1,18 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/");
+    }
+  }, [status, router]);
 
   if (status === "loading") {
     return <div>Loading...</div>;

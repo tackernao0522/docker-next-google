@@ -1,3 +1,4 @@
+# next.js docker-compose.yml
 services:
   app:
     build:
@@ -7,6 +8,13 @@ services:
       - ./src:/app
     environment:
       - WATCHPACK_POLLING=true
+      - NEXT_PUBLIC_API_URL=http://my_rails_api-api-1:3001 # Docker内部のRails APIのURLを設定
     command: sh -c "npm run dev"
     ports:
       - "3000:3000"
+    networks:
+      - myapp_network
+
+networks:
+  myapp_network:
+    external: true
