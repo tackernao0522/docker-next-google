@@ -13,7 +13,7 @@ const DeleteUser: React.FC = () => {
 
     try {
       const response = await axios.delete(
-        `/api/auth?email=${session.user.email}`
+        `/api/auth/delete?email=${session.user.email}`
       );
 
       if (response.status === 204) {

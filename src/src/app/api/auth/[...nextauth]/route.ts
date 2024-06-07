@@ -94,9 +94,7 @@ export async function DELETE(req: NextRequest) {
   }
 
   try {
-    const response = await axios.delete(`${apiUrl}/users`, {
-      data: { email },
-    });
+    const response = await axios.delete(`${apiUrl}/users/${email}`);
 
     if (response.status === 204) {
       return NextResponse.json(
