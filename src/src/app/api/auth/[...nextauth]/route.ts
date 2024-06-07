@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
 import axios from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"; // 必要に応じて変更
 
@@ -87,18 +87,33 @@ const handler = NextAuth(options);
 export { handler as GET, handler as POST };
 
 // ユーザー削除エンドポイント
-export async function DELETE(req: NextApiRequest, res: NextApiResponse) {
-  const { email } = req.query as { email: string };
+export async function DELETE(req: NextRequest) {
+  const email = req.nextUrl.searchParams.get("email");
+  if (!email) {
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
+  }
+
   try {
     const response = await axios.delete(`${apiUrl}/users`, {
       data: { email },
     });
 
     if (response.status === 204) {
-      res.status(response.status).json({ error: "Failed to delete user" });
+      return NextResponse.json(
+        { message: "User deleted successfully" },
+        { status: 204 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: "Failed to delete user" },
+        { status: response.status }
+      );
     }
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
