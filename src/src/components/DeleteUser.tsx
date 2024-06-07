@@ -1,7 +1,8 @@
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
+import React from "react";
 
-const DeleteUser = async () => {
+const DeleteUser: React.FC = () => {
   const { data: session } = useSession();
 
   const handleDeleteUser = async () => {
@@ -21,14 +22,14 @@ const DeleteUser = async () => {
         console.error("アカウント削除に失敗しました");
       }
     } catch (error) {
-      console.log("何らかの問題があります", error);
+      console.error("何らかの問題があります", error);
     }
   };
 
   if (session) {
     return (
       <div>
-        <button onClick={() => handleDeleteUser()}>アカウントを削除する</button>
+        <button onClick={handleDeleteUser}>アカウントを削除する</button>
       </div>
     );
   }

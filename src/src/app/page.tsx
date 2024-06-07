@@ -4,9 +4,9 @@ import { useSession } from "next-auth/react";
 import Login from "../components/Login";
 import Logout from "../components/Logout";
 import Image from "next/image";
-import DeleteUser from "@/components/DeleteUser";
+import DeleteUser from "../components/DeleteUser";
 
-const Home = () => {
+const Home: React.FC = () => {
   const { data: session, status } = useSession();
 
   return (
