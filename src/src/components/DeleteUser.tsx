@@ -26,14 +26,11 @@ const DeleteUser: React.FC = () => {
     }
   };
 
-  if (session) {
-    return (
-      <div>
-        <button onClick={handleDeleteUser}>アカウントを削除する</button>
-      </div>
-    );
-  }
-  return null;
+  return (
+    <div>
+      <button onClick={handleDeleteUser}>アカウントを削除する</button>
+    </div>
+  );
 };
 
 export default DeleteUser;
