@@ -95,8 +95,6 @@ export async function DELETE(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (response.status === 204) {
-      res.status(204).end();
-    } else {
       res.status(response.status).json({ error: "Failed to delete user" });
     }
   } catch (error) {
