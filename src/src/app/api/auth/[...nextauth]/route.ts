@@ -1,4 +1,4 @@
-// 4
+// 5
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
@@ -73,6 +73,7 @@ const handler = NextAuth(options);
 
 export { handler as GET, handler as POST };
 
+// ユーザー削除エンドポイント
 export async function DELETE(req: NextRequest) {
   const email = req.nextUrl.searchParams.get("email");
   if (!email) {
@@ -89,7 +90,7 @@ export async function DELETE(req: NextRequest) {
       );
     } else {
       return NextResponse.json(
-        { error: "Failed to delete user" },
+        { error: "Failed to delete user", details: response.data },
         { status: response.status }
       );
     }
@@ -99,7 +100,10 @@ export async function DELETE(req: NextRequest) {
       error.response ? error.response.data : error.message
     );
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      {
+        error: "Internal Server Error",
+        details: error.response ? error.response.data : error.message,
+      },
       { status: 500 }
     );
   }
