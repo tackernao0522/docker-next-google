@@ -1,9 +1,11 @@
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const DeleteUser: React.FC = () => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const handleDeleteUser = async () => {
     if (!session || !session.user) {
@@ -22,13 +24,13 @@ const DeleteUser: React.FC = () => {
         `/api/auth/delete?email=${session.user.email}`
       );
 
-      // 204 No Contentの場合、axiosはresponse.dataが空なので、特別に処理
       if (
         response.status === 204 ||
         (response.data && response.data.message === "User deleted successfully")
       ) {
         console.log("アカウントが正常に削除されました");
-        signOut();
+        signOut({ redirect: false }); // デフォルトのリダイレクトを無効にする
+        router.push("/auth/login"); // 手動でログインページに遷移する
       } else {
         console.error("アカウント削除に失敗しました", response.data);
       }
