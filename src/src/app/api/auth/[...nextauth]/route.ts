@@ -72,7 +72,6 @@ const handler = NextAuth(options);
 
 export { handler as GET, handler as POST };
 
-// ユーザー削除エンドポイント
 export async function DELETE(req: NextRequest) {
   const email = req.nextUrl.searchParams.get("email");
   if (!email) {
