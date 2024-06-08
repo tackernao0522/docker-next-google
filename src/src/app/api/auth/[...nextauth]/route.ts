@@ -1,4 +1,3 @@
-// 5
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
@@ -89,6 +88,7 @@ export async function DELETE(req: NextRequest) {
         { status: 204 }
       );
     } else {
+      console.error("Failed to delete user:", response.data);
       return NextResponse.json(
         { error: "Failed to delete user", details: response.data },
         { status: response.status }
