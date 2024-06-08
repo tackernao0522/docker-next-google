@@ -1,4 +1,3 @@
-// src/components/DeleteUser.tsx
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
@@ -30,8 +29,9 @@ const DeleteUser: React.FC = () => {
         (response.data && response.data.message === "User deleted successfully")
       ) {
         console.log("アカウントが正常に削除されました");
-        await signOut({ redirect: false, callbackUrl: "/" }); // リダイレクトを無効化し、callbackUrlを指定
-        router.push("/"); // 明示的にルーティング
+        signOut({ redirect: false }).then(() => {
+          router.push("/auth/login"); // 明示的にルーティング
+        });
       } else {
         console.error("アカウント削除に失敗しました", response.data);
       }
