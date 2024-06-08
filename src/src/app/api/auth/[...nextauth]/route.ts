@@ -72,6 +72,7 @@ const handler = NextAuth(options);
 
 export { handler as GET, handler as POST };
 
+// ユーザー削除エンドポイント
 export async function DELETE(req: NextRequest) {
   const email = req.nextUrl.searchParams.get("email");
   if (!email) {
@@ -84,8 +85,8 @@ export async function DELETE(req: NextRequest) {
     if (response.status === 204) {
       return NextResponse.json(
         { message: "User deleted successfully" },
-        { status: 204 }
-      );
+        { status: 200 }
+      ); // 204ではなく200を返すように変更
     } else {
       return NextResponse.json(
         { error: "Failed to delete user", details: response.data },
