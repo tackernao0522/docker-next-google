@@ -1,8 +1,8 @@
 // src/components/DeleteUser.tsx
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const DeleteUser: React.FC = () => {
   const { data: session } = useSession();
@@ -14,8 +14,10 @@ const DeleteUser: React.FC = () => {
       return;
     }
 
-    const confirmDelete = window.confirm("本当に削除しますか？");
-    if (!confirmDelete) return;
+    const confirmed = window.confirm("本当に削除しますか？");
+    if (!confirmed) {
+      return;
+    }
 
     try {
       const response = await axios.delete(
@@ -23,7 +25,8 @@ const DeleteUser: React.FC = () => {
       );
 
       if (response.status === 204) {
-        await signOut({ callbackUrl: "/auth/login" });
+        await signOut();
+        router.push("/auth/login"); // ログインページへのリダイレクト
       } else {
         console.error("アカウント削除に失敗しました", response.data);
       }
