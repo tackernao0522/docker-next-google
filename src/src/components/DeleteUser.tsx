@@ -1,4 +1,3 @@
-// fix
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
@@ -17,7 +16,11 @@ const DeleteUser: React.FC = () => {
         `/api/auth/delete?email=${session.user.email}`
       );
 
-      if (response.status === 204) {
+      // 204 No Contentの場合、axiosはresponse.dataが空なので、特別に処理
+      if (
+        response.status === 204 ||
+        response.data.message === "User deleted successfully"
+      ) {
         console.log("アカウントが正常に削除されました");
         signOut();
       } else {
