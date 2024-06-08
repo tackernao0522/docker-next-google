@@ -1,4 +1,4 @@
-// DeleteUser.tsx 2
+// DeleteUser.tsx 3
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
