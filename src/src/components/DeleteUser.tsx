@@ -1,4 +1,3 @@
-// 5
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
@@ -18,6 +17,7 @@ const DeleteUser: React.FC = () => {
       );
 
       if (response.status === 204) {
+        console.log("アカウントが正常に削除されました");
         signOut();
       } else {
         console.error("アカウント削除に失敗しました", response.data);
