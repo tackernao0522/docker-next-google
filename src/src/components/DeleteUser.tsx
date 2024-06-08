@@ -1,3 +1,4 @@
+// DeleteUser.tsx
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
@@ -19,10 +20,12 @@ const DeleteUser: React.FC = () => {
       if (response.status === 204) {
         signOut();
       } else {
-        console.error("アカウント削除に失敗しました");
+        console.error(
+          `アカウント削除に失敗しました: ${response.status} ${response.statusText}`
+        );
       }
     } catch (error) {
-      console.error("何らかの問題があります", error);
+      console.error("何らかの問題があります:", error);
     }
   };
 
