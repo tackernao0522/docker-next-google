@@ -30,7 +30,7 @@ const DeleteUser: React.FC = () => {
       ) {
         console.log("アカウントが正常に削除されました");
         signOut({ redirect: false }).then(() => {
-          router.push("/auth/login"); // 明示的にルーティング
+          router.push("/"); // 明示的にルーティング
         });
       } else {
         console.error("アカウント削除に失敗しました", response.data);
