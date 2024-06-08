@@ -1,4 +1,4 @@
-// DeleteUser.tsx
+// DeleteUser.tsx 2
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
@@ -24,8 +24,11 @@ const DeleteUser: React.FC = () => {
           `アカウント削除に失敗しました: ${response.status} ${response.statusText}`
         );
       }
-    } catch (error) {
-      console.error("何らかの問題があります:", error);
+    } catch (error: any) {
+      console.error(
+        "何らかの問題があります:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 

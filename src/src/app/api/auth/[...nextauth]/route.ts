@@ -93,8 +93,11 @@ export async function DELETE(req: NextRequest) {
         { status: response.status }
       );
     }
-  } catch (error) {
-    console.error("Error deleting user:", error);
+  } catch (error: any) {
+    console.error(
+      "Error deleting user:",
+      error.response ? error.response.data : error.message
+    );
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
