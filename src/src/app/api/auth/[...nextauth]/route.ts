@@ -88,7 +88,6 @@ export async function DELETE(req: NextRequest) {
         { status: 204 }
       );
     } else {
-      console.error("Failed to delete user:", response.data);
       return NextResponse.json(
         { error: "Failed to delete user", details: response.data },
         { status: response.status }
