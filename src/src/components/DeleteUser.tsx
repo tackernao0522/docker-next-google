@@ -11,6 +11,12 @@ const DeleteUser: React.FC = () => {
       return;
     }
 
+    const confirmDeletion = window.confirm("本当に削除しますか？");
+
+    if (!confirmDeletion) {
+      return;
+    }
+
     try {
       const response = await axios.delete(
         `/api/auth/delete?email=${session.user.email}`
